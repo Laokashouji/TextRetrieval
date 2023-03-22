@@ -1,13 +1,13 @@
 import re
 import shelve
 
-from docProcess import text
+from docProcess import text, Tfidf
 
 
 def load(filename: str):
-    file_object2 = open('./doc/' + filename, 'r')
+    file = open('./doc/' + filename, 'r')
     try:
-        lines = file_object2.readlines()
+        lines = file.readlines()
         dic = {}
         tot = 0
         for line in lines:
@@ -20,10 +20,25 @@ def load(filename: str):
         text.add_doc(filename, dic, tot)
 
     finally:
-        file_object2.close()
+        file.close()
 
 
-def save(data_dict: dict):
-    with shelve.open('file_name', flag='c') as file_to_write:
+def save():
+    with shelve.open('./data/data.dat', flag='c') as file_to_write:
+        file_to_write['tf'] = Tfidf.tf
+        file_to_write['idf'] = Tfidf.idf
+        file_to_write
+
+
+def read(data_dict: dict):
+    with shelve.open('./data/data.dat', flag='c') as file_to_write:
         for k, v in data_dict.items():
             file_to_write[k] = v
+
+
+def get_data():
+    load("1.txt")
+    load("2.txt")
+    Tfidf.update_idf()
+    Tfidf.update_tfidf()
+    save()
