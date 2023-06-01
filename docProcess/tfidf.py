@@ -19,8 +19,8 @@ class Tfidf:
     def update_tfidf(cls):
         for term in cls.tf.keys():
             cls.tfidf.setdefault(term, {})
-            for filename in cls.doc_list:
-                cls.tfidf[term][filename] = cls.tf[term].setdefault(filename, 0) * cls.idf[term]
+            for title, url, time in cls.doc_list:
+                cls.tfidf[term][title] = cls.tf[term].setdefault(title, 0) * cls.idf[term]
 
     @classmethod
     def update_tf(cls, filename: str, dic: dict, term_num: int):
@@ -35,6 +35,6 @@ class Tfidf:
             cls.tf.setdefault(term, {})
             cls.tf[term][filename] = num / term_num
             doc_term_num = cls.doc_term_num.setdefault(term, 0)
-            cls.doc_term_num[term] = doc_term_num + 1
+            cls.doc_term_num[term] = doc_term_num + num
             cls.idf.setdefault(term, 0)
 
